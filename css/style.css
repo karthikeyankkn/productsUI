@@ -1,0 +1,144 @@
+/* reset css starts here */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* reset css ends here */
+body {
+    background-color: #FFF5E1;
+    color: #fff;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+}
+.todo-list-container {
+    max-width: 500px;
+    margin: auto;
+    padding: 10px;
+}
+.todo-list-input-container {
+
+}
+.todo-list-input-container form {
+    display: flex;
+    justify-content: space-between;
+}
+.todo-list-input-container form input {
+    width: 75%;
+    border: 2px solid #FF6969;
+    border-radius: 3px;
+    background: #fff;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 18px;
+    color: #0C1844;
+}
+.todo-list-input-container form button {
+    width: 20%;
+    border-radius: 3px;
+    border: none;
+    background-color: #C80036;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+}
+.todo-list-view {
+    margin-top: 10px;
+    width: 100%;
+    position: relative;
+}
+.todo-list-view ul {
+
+}
+.todo-list-view ul li {
+    display: block;
+    background-color: #0C1844;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+.todo-list-view ul li label {
+    display: inline-block;
+    width: 80%;
+    vertical-align: super;
+}
+.todo-list-view ul li i {
+    cursor: pointer;
+}
+.todo-list-view ul li > .is-required {
+    height: 24px;
+    width: 24px;
+    border: 1px solid #FF6969;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+}
+.list-required {
+    background: #FF6969;
+}
+.list-not-required {
+    background: transparent;
+}
+.todo-list-view ul li > .delete {
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+}
+#notification {
+    width: 85%;
+    padding: 10px;
+    border-radius: 5px;
+    position: fixed;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: none;
+}
+.notification-success {
+    background: #3CCF4E;
+}
+.notification-danger {
+    background: #EF5B0C;
+}
+.notification-info {
+    background: #D4F6CC;
+}
