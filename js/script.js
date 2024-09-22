@@ -1,28 +1,4 @@
-let sampleListData = [{
-    "productid": 1,
-    "productname": "manjal",
-    "isRequired": true
-},
-{
-    "productid": 2,
-    "productname": "Kungumam",
-    "isRequired": true
-},
-{
-    "productid": 3,
-    "productname": "onion",
-    "isRequired": false
-},
-{
-    "productid": 4,
-    "productname": "tomato",
-    "isRequired": true
-},
-{
-    "productid": 5,
-    "productname": "Mavu",
-    "isRequired": true
-}];
+
 // Helpers code start here
 let isNull = null, isEmpty;
 
@@ -61,7 +37,7 @@ let localApiUrl = 'http://localhost:3000/api/',
     liveApiUrl = 'https://todo-list-plyq.onrender.com/api/',
     hostname = window.location.hostname, getProducts, allProducts = [],
     submitItem, validateInput, listObject, showInvalidInput, listTemplate = null, showList = null, itemData = null,
-    addItem = null, getJson, addProduct, showNotification, deleteProduct;
+    addItem = null, getJson, addProduct, showNotification, deleteProduct, modifyProduct, updateProduct, isEnableEdit = true, enableEdit;
 
 const domain = (hostname === '127.0.0.1') ? localApiUrl : liveApiUrl,
       addButton = document.querySelector('.todo-list-input-container form button'),
@@ -96,13 +72,22 @@ getProducts = async function getData() {
 
 addItem = function (data) {
     let todoListViewContainer = document.querySelector('.todo-list-view ul'),
-        listTemplate = `<li list-id=${data.productid}><i class="is-required ${(data.isRequired) ? 'list-required' : 'list-not-required'}" required="${data.isRequired}"></i><label>${data.productname}</label><i class="delete" onclick='removeItemFromList(${data.productid})'>X</i></li>`,
+        listTemplate = `<li list-id=${data.productid}><i onclick='modifyProduct(${data.productid},${!data.isactive})'id='is-required' class="${(data.isactive) ? 'list-required' : 'list-not-required'}" required="${data.isactive}"></i><label contentEditable='false'>${data.productname}</label><i class="productEdit" onclick='((isEnableEdit) ? enableEdit(${data.productid}) : modifyProduct(${data.productid},${data.isactive}))'>Edit</i><i class="delete" onclick='removeItemFromList(${data.productid})'>X</i></li>`,
         tempDiv = document.createElement("div");
         tempDiv.innerHTML = listTemplate;
         while (tempDiv.firstChild) {
             todoListViewContainer.appendChild(tempDiv.firstChild);
         }
         
+}
+
+enableEdit = (id) => {
+    let currentProduct = document.querySelector(`[list-id='${id}']`);
+
+    currentProduct.querySelector('label').setAttribute('contentEditable', true);
+    currentProduct.querySelector('.productEdit').innerText = 'Save';
+    currentProduct.querySelector('.productEdit').style.textDecoration = 'underline'
+    isEnableEdit = false;
 }
 
 showList = function() {
@@ -124,9 +109,9 @@ addProduct = async (product) => {
             },
             body: JSON.stringify({
                 'productname': product,
-                'isRequired': true,
+                'isactive': true,
                 'price': 0,
-                'quantity': 0
+                'quantity': 0,
             }),
         });
         return await response.json();
@@ -151,20 +136,46 @@ deleteProduct = async (id) => {
         throw new Error(`Error deleting data: ${error}`);
     }
 };
+
+// PUT for product
+updateProduct = async (currentProductObj) => {
+    try {
+      const response = await fetch(`${domain}products/${currentProductObj.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'productname': currentProductObj.productname,
+            'isactive': currentProductObj.isactive,
+            'price': 0,
+            'quantity': 0,
+          
+        }),
+      });
   
-  
-  
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating data:', error);
+    }
+  };
 
+  modifyProduct = (id,isactive) => {
+    let currentProductObj = {}, currentProduct = document.querySelector(`[list-id='${id}']`);
 
+    currentProductObj.id = id;
+    currentProductObj.productname = currentProduct.querySelector('label').innerText;
+    currentProductObj.isactive = isactive;
+ 
+    updateProduct(currentProductObj).then((value) => {
+        showNotification(value.message, 'notification-success');
+    });
+}
 
-
-
-
-
-listObject = function(productname, isRequired) {
+listObject = function(productname, isactive) {
     return {
         'productname': productname,
-        'isRequired': isRequired,
+        'isactive': isactive,
         'price': 0,
         'quantity': 0
     }
@@ -199,15 +210,6 @@ let removeItemFromList = function(id) {
         deleteProduct(id);
     }
 }
-
-let toggleRequired = function (id) {
-    let currentItem = document.querySelector(`[list-id='${id}']`).firstChild;
-
-    currentItem.firstChild
-
-}
-
-
 
 submitItem = function(e) {
     let isValid, input;
